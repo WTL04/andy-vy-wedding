@@ -9,6 +9,7 @@
   align-items: center;
   text-align: center;
   gap: 8px;
+  overflow-x: hidden;
 }
 
 .monogram {
@@ -20,7 +21,7 @@
 
 .mobile-container h1 {
   font-size: 9vh;
-  margin-bottom: 16px;
+  margin-bottom: 50px;
   letter-spacing: 0.5px;
 }
 
@@ -51,7 +52,7 @@
     background 0.3s ease,
     transform 0.15s ease,
     box-shadow 0.3s ease;
-  margin-top: 8px;
+  margin-top: 50px;
 }
 
 .rsvp-button:hover {
