@@ -3,7 +3,7 @@ export default function PhotoCarousel() {
     <div className="carousel">
       <img
         className="carousel-image"
-        src="/imgs/photo_1.JPG"
+        src="/imgs/photo_3 temp.png"
         alt="Photo"
       />
     </div>

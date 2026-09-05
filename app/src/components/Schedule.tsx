@@ -45,7 +45,7 @@ export default function Schedule() {
       <div className="dress-code">
         <img
           className="dress-code-icon"
-          src="/imgs/hanger.png"
+          src="/icons/hanger.png"
           alt="Dress code"
         />
         <p>Please no wine, burgundy, rustic, taupe, umber, or white colors :)</p>
