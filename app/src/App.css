@@ -21,7 +21,7 @@
 
 .mobile-container h1 {
   font-size: 7vh;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   letter-spacing: 0.5px;
 }
 
@@ -34,7 +34,7 @@
 .countdown {
   font-style: italic;
   font-size: 24px;
-  margin: 20px 0;
+  margin: 50px 0;
   letter-spacing: 0.3px;
 }
 
@@ -53,6 +53,7 @@
     transform 0.15s ease,
     box-shadow 0.3s ease;
   margin-top: 50px;
+  margin-bottom: 100px;
 }
 
 .rsvp-button:hover {
@@ -62,4 +63,9 @@
 
 .rsvp-button:active {
   transform: scale(0.93);
+}
+
+.our_story {
+  font-size: 24px;
+  line-height: 1.6;
 }

@@ -1,0 +1,91 @@
+.schedule {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 80px;
+}
+
+.schedule h2 {
+  font-size: 7vh;
+  margin-bottom: 8px;
+}
+
+.schedule-date {
+  font-size: 24px;
+  margin-bottom: 48px;
+}
+
+.schedule-event {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.event-time {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 32px;
+  white-space: nowrap;
+  min-width: 100px;
+  text-align: right;
+  padding-top: 2px;
+}
+
+.event-divider {
+  width: 1px;
+  min-height: 60px;
+  background: var(--text);
+  opacity: 0.5;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.event-details {
+  text-align: left;
+}
+
+.event-name {
+  font-family: var(--font-body);
+  font-size: 24px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.event-name,
+.event-details p {
+  font-size: 24px;
+}
+
+.event-address {
+  font-size: 16px;
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.event-address:hover {
+  opacity: 1;
+}
+
+.dress-code {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+  text-align: center;
+}
+
+.dress-code-icon {
+  width: 40px;
+  height: 40px;
+  color: var(--text);
+}
+
+.dress-code p {
+  font-style: italic;
+  font-size: 24px;
+  max-width: 320px;
+  line-height: 1.5;
+}
