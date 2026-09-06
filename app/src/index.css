@@ -11,6 +11,11 @@
   box-sizing: border-box;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 body {
   background-color: var(--bg);
   color: var(--text);

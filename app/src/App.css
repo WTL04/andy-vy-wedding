@@ -68,3 +68,55 @@
   font-size: 24px;
   line-height: 1.6;
 }
+
+@media (max-width: 440px) {
+  .mobile-container {
+    padding: 40px 16px;
+  }
+
+  .monogram {
+    width: 280px;
+    height: 260px;
+  }
+
+  .mobile-container h1 {
+    font-size: 6vh;
+  }
+
+  .date,
+  .location {
+    font-size: 20px;
+  }
+
+  .countdown {
+    font-size: 20px;
+  }
+
+  .our_story {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 375px) {
+  .mobile-container h1 {
+    font-size: 5vh;
+  }
+
+  .monogram {
+    width: 260px;
+    height: 240px;
+  }
+
+  .date,
+  .location {
+    font-size: 18px;
+  }
+
+  .countdown {
+    font-size: 18px;
+  }
+
+  .our_story {
+    font-size: 18px;
+  }
+}

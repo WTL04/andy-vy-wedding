@@ -69,6 +69,72 @@
   opacity: 1;
 }
 
+@media (max-width: 440px) {
+  .schedule h2 {
+    font-size: 6vh;
+  }
+
+  .schedule-date {
+    font-size: 20px;
+  }
+
+  .event-time {
+    font-size: 28px;
+  }
+
+  .event-name,
+  .event-details p {
+    font-size: 20px;
+  }
+
+  .dress-code p {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 375px) {
+  .schedule h2 {
+    font-size: 5vh;
+  }
+
+  .schedule-date {
+    font-size: 18px;
+  }
+
+  .event-time {
+    font-size: 24px;
+  }
+
+  .event-name,
+  .event-details p {
+    font-size: 18px;
+  }
+
+  .dress-code p {
+    font-size: 18px;
+  }
+
+  .schedule-event {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .event-time {
+    text-align: center;
+    min-width: auto;
+  }
+
+  .event-divider {
+    width: 40px;
+    min-height: 1px;
+    margin: 0 auto;
+  }
+
+  .event-details {
+    text-align: center;
+  }
+}
+
 .dress-code {
   display: flex;
   flex-direction: column;

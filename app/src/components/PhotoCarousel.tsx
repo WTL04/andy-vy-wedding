@@ -1,9 +1,11 @@
+import photo from '../assets/photo_3.png'
+
 export default function PhotoCarousel() {
   return (
     <div className="carousel">
       <img
         className="carousel-image"
-        src="/imgs/photo_3 temp.png"
+        src={photo}
         alt="Photo"
       />
     </div>
