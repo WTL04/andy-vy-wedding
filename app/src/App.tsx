@@ -37,9 +37,11 @@ function App() {
         </div>
         <div id="registry">
           <h1>Registry</h1>
+          <p>WIP</p>
         </div>
         <div id="moments">
           <h1>Moments</h1>
+          <p>WIP</p>
         </div>
       </div>
     </>
