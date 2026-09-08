@@ -70,11 +70,15 @@
   line-height: 1.6;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 800px) {
   .mobile-container {
     width: 100vw;
     max-width: 100vw;
     padding: 40px 16px;
+  }
+
+  .mobile-container h1 {
+    font-size: 5vh;
   }
 
   .monogram {

@@ -3,7 +3,7 @@ import './Schedule.css'
 export default function Schedule() {
   return (
     <div className="schedule">
-      <h2>Schedule</h2>
+      <h1>Schedule</h1>
       <p className="schedule-date">Saturday, February 27, 2027</p>
 
       <div className="schedule-event">
