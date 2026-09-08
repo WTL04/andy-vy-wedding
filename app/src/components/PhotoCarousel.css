@@ -10,3 +10,9 @@
   border-radius: 4px;
   display: block;
 }
+
+@media (max-width: 480px) {
+  .carousel {
+    max-width: 280px;
+  }
+}
