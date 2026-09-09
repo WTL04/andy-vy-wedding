@@ -3,6 +3,7 @@ import './Navbar.css'
 
 const links = [
   { label: 'Home', href: '#home', scrollToTop: true },
+  { label: 'RSVP', href: '#rsvp' },
   { label: 'Story', href: '#story' },
   { label: 'Schedule', href: '#schedule' },
   { label: 'Registry', href: '#registry' },

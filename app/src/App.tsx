@@ -6,6 +6,7 @@ import PhotoCarousel from './components/PhotoCarousel'
 import Schedule from './components/Schedule'
 import SpecialThanks from './components/SpecialThanks'
 import QandA from './components/QandA'
+import OurStory from './components/OurStory'
 import './App.css'
 
 function App() {
@@ -18,17 +19,14 @@ function App() {
           <h1>You are Invited!</h1>
           <p className="date">Saturday, February 27, 2027</p>
           <p className="location">Garden Grove, California</p>
-          <CountdownTimer targetDate="2027-02-27T16:00:00-08:00" />
+          <CountdownTimer targetDate="2027-02-27T12:00:00-08:00" />
         </div>
         <div id="rsvp">
           <RsvpButton />
         </div>
         <SpecialThanks />
         <PhotoCarousel />
-        <div id="story">
-          <h1>Our Story</h1>
-          <p className="our_story">We met when we were eighteen and twenty years old. The thought that one day we would be married to each other never crossed our minds, but we made it through those harsh years, and we have grown to love each other even more dearly. We were together through our twenties and will continue to go through life together forever 🤍</p>
-        </div>
+        <OurStory />
         <div id="schedule">
           <Schedule />
         </div>
