@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react'
 import './Navbar.css'
 
+const RSVP_URL = 'https://withjoy.com/vyandandy/rsvp'
+
 const links = [
   { label: 'Home', href: '#home', scrollToTop: true },
-  { label: 'RSVP', href: '#rsvp' },
   { label: 'Story', href: '#story' },
   { label: 'Schedule', href: '#schedule' },
   { label: 'Registry', href: '#registry' },
@@ -28,7 +29,25 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-desktop">
-        {links.map((link) => (
+        <a
+          className="navbar-link"
+          href="#home"
+          onClick={(e) => {
+            e.preventDefault()
+            smoothScroll('#home', true)
+          }}
+        >
+          Home
+        </a>
+        <a
+          className="navbar-link"
+          href={RSVP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          RSVP
+        </a>
+        {links.slice(1).map((link) => (
           <a
             key={link.label}
             className="navbar-link"
@@ -83,12 +102,10 @@ export default function Navbar() {
           ))}
           <a
             className="navbar-sidebar-rsvp"
-            href="#rsvp"
-            onClick={(e) => {
-              e.preventDefault()
-              closeMenu()
-              smoothScroll('#rsvp')
-            }}
+            href={RSVP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={closeMenu}
           >
             RSVP
           </a>

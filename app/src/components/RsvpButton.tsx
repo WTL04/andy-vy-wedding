@@ -1,7 +1,12 @@
 export default function RsvpButton() {
   return (
-    <button className="rsvp-button" type="button">
+    <a
+      className="rsvp-button"
+      href="https://withjoy.com/vyandandy/rsvp"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       RSVP
-    </button>
+    </a>
   )
 }
