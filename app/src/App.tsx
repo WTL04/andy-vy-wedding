@@ -7,6 +7,7 @@ import Schedule from './components/Schedule'
 import SpecialThanks from './components/SpecialThanks'
 import QandA from './components/QandA'
 import OurStory from './components/OurStory'
+import Footer from './components/Footer'
 import './App.css'
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <p>WIP</p>
         </div>
       </div>
+      <Footer />
     </>
   )
 }

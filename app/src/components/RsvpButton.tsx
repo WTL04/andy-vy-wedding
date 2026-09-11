@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./RsvpButton.css";
 
 const RSVP_URL = "https://withjoy.com/vyandandy/rsvp";
