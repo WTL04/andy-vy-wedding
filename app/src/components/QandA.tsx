@@ -22,9 +22,10 @@ const faqs = [
   },
   {
     question: 'What should I wear?',
-    answerBefore: 'Please refrain from wearing white, rustic, and taupe colored dresses and wine and burgundy colored suits',
+    answerBefore: 'Ladies ~ No white, rustic, taupe, umber or bronzer dresses',
     highlight: '',
     answerAfter: '',
+    subtext: 'Gentlemen ~ No sage / olive color suits'
   },
 ]
 
