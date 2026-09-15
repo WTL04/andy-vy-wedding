@@ -7,6 +7,7 @@ import Schedule from './components/Schedule'
 import SpecialThanks from './components/SpecialThanks'
 import QandA from './components/QandA'
 import OurStory from './components/OurStory'
+import Registry from './components/Registry'
 import Footer from './components/Footer'
 import './App.css'
 
@@ -34,10 +35,7 @@ function App() {
         <div id="qa">
           <QandA />
         </div>
-        <div id="registry">
-          <h1>Registry</h1>
-          <p>WIP</p>
-        </div>
+        <Registry />
         <div id="moments">
           <h1>Moments</h1>
           <p>WIP</p>
