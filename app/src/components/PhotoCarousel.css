@@ -32,8 +32,3 @@
 .photo-carousel__dot.is-active {
   background: var(--text);
 }
-
-
-@media (max-width: 800px) {
-
-}

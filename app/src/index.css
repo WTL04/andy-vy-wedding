@@ -26,6 +26,12 @@ body {
   }
 }
 
+/* Stop elastic sideways panning on touch devices. */
+html,
+body {
+  overscroll-behavior-x: none;
+}
+
 body {
   background-color: var(--bg);
   color: var(--text);

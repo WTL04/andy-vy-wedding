@@ -75,10 +75,7 @@ function App() {
         <div id="qa">
           <QandA />
         </div>
-        <div id="registry">
-          <h1>Registry</h1>
-          <p>WIP</p>
-        </div>
+        <Registry />
       </div>
       <Footer />
     </>
