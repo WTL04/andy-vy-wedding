@@ -1,0 +1,94 @@
+.rsvp-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: #1c1c1a;
+  color: #ffffff;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.rsvp-button:hover {
+  background: #35352f;
+}
+
+.rsvp-button:focus-visible {
+  outline: 2px solid #1c1c1a;
+  outline-offset: 2px;
+}
+
+/* Floating pill, fixed to the viewport once the inline button
+   has scrolled out of view above. */
+.rsvp-floating {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translate(-50%, -16px);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 10px 10px 24px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 100;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.rsvp-floating--visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.rsvp-floating__date {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 1rem;
+  color: #2b2b26;
+  white-space: nowrap;
+}
+
+.rsvp-floating__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: #1c1c1a;
+  color: #ffffff;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.rsvp-floating__button:hover {
+  background: #35352f;
+}
+
+.rsvp-floating__button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rsvp-floating {
+    transition: opacity 0.25s ease;
+    transform: translate(-50%, 0);
+  }
+}

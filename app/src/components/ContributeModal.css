@@ -1,0 +1,379 @@
+/* Contribute modal (registry.html). Scoped under .cm-* so it never
+   clashes with the main site's theme. */
+
+.cm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+  overflow-y: auto;
+  box-sizing: border-box;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+}
+
+.cm-modal {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: 780px;
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+  color: #1a1a1a;
+}
+
+.cm-image {
+  width: 42%;
+  min-height: 440px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cm-imagewrap {
+  position: relative;
+  width: 42%;
+  min-height: 440px;
+  flex-shrink: 0;
+}
+
+.cm-imagewrap .cm-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.cm-image__label,
+.cm-image__amount {
+  position: absolute;
+  bottom: 20px;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 20px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+.cm-image__label {
+  left: 20px;
+}
+
+.cm-image__amount {
+  right: 20px;
+  font-size: 28px;
+}
+
+.cm-body {
+  flex: 1;
+  padding: 56px 36px 36px;
+  min-width: 0;
+}
+
+.cm-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f1f1;
+  color: #1a1a1a;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.cm-close:hover {
+  background: #e4e4e4;
+}
+
+.cm-back {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  border: none;
+  background: #f4f4f5;
+  border-radius: 999px;
+  padding: 8px 18px 8px 14px;
+  font-size: 15px;
+  color: #333333;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.cm-back:hover {
+  background: #e9e9eb;
+}
+
+.cm-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 12px;
+}
+
+.cm-desc,
+.cm-sub {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555555;
+  margin-bottom: 24px;
+}
+
+.cm-readmore {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #0f766e;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.cm-readmore:hover {
+  text-decoration: underline;
+}
+
+.cm-label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 8px;
+}
+
+.cm-label--required {
+  color: #b91c1c;
+}
+
+.cm-amountwrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1.5px solid #1a1a1a;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 20px;
+  color: #666666;
+}
+
+.cm-amountwrap input {
+  border: none;
+  outline: none;
+  font-size: 20px;
+  width: 100%;
+  color: #111111;
+  background: transparent;
+}
+
+.cm-input {
+  width: 100%;
+  border: 1.5px solid #1a1a1a;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 16px;
+  color: #111111;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+.cm-input::placeholder {
+  color: #9ca3af;
+}
+
+.cm-input.is-invalid {
+  border-color: #dc2626;
+}
+
+.cm-hint {
+  font-size: 14px;
+  color: #b91c1c;
+  margin-top: 6px;
+  margin-bottom: 20px;
+}
+
+.cm-hint.is-error {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.cm-error {
+  font-size: 14px;
+  color: #dc2626;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.cm-primary {
+  width: 100%;
+  background: #1c1c1a;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 16px 24px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 24px;
+  transition: background 0.2s ease;
+}
+
+.cm-primary:hover {
+  background: #35352f;
+}
+
+.cm-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.cm-method {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1.5px solid #d4d4d4;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 17px;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.cm-method.is-selected {
+  border-color: #1a1a1a;
+}
+
+.cm-method input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cm-method__check {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid #a3a3a3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.cm-method.is-selected .cm-method__check {
+  background: #1c1c1a;
+  border-color: #1c1c1a;
+}
+
+.cm-next {
+  width: 100%;
+  background: #4757f5;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 16px 24px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cm-next:hover {
+  background: #3a48d8;
+}
+
+.cm-done {
+  text-align: center;
+  padding-top: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cm-done .cm-title {
+  margin-bottom: 16px;
+}
+
+.cm-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #4757f5;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.cm-link:hover {
+  text-decoration: underline;
+}
+
+.cm-qr {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+
+.cm-qr--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555555;
+  background: #f4f4f5;
+  border: 1.5px dashed #a3a3a3;
+  font-style: italic;
+  font-size: 15px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .cm-modal {
+    flex-direction: column;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+  }
+
+  .cm-image {
+    width: 100%;
+    min-height: 0;
+    height: 200px;
+  }
+
+  .cm-imagewrap {
+    width: 100%;
+    min-height: 0;
+    height: 200px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .cm-body {
+    padding: 32px 24px 28px;
+  }
+
+  .cm-title {
+    font-size: 22px;
+  }
+
+  .cm-image__amount {
+    font-size: 24px;
+  }
+}

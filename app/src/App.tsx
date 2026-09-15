@@ -7,6 +7,8 @@ import Schedule from './components/Schedule'
 import SpecialThanks from './components/SpecialThanks'
 import QandA from './components/QandA'
 import OurStory from './components/OurStory'
+import Registry from './components/Registry'
+import Footer from './components/Footer'
 import './App.css'
 
 const coolTonePhotos: CarouselPhoto[] = [
@@ -78,6 +80,7 @@ function App() {
           <p>WIP</p>
         </div>
       </div>
+      <Footer />
     </>
   )
 }

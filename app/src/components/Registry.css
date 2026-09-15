@@ -1,0 +1,53 @@
+.registry {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 80px;
+  text-align: center;
+}
+
+.registry h2 {
+  font-size: 7vh;
+  margin-bottom: 32px;
+}
+
+.registry-blurb {
+  font-style: italic;
+  font-size: 24px;
+  line-height: 1.5;
+  margin-bottom: 48px;
+}
+
+.registry-button {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: var(--text);
+  background: transparent;
+  border: 1.5px solid var(--text);
+  border-radius: 999px;
+  padding: 12px 48px;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    transform 0.15s ease;
+}
+
+.registry-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.registry-button:active {
+  transform: scale(0.93);
+}
+
+@media (max-width: 480px) {
+  .registry-blurb {
+    font-size: 20px;
+  }
+
+  .registry-button {
+    padding: 12px 36px;
+  }
+}
