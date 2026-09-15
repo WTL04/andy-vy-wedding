@@ -2,7 +2,7 @@ import Navbar from './components/Navbar'
 import Monogram from './components/Monogram'
 import CountdownTimer from './components/CountdownTimer'
 import RsvpButton from './components/RsvpButton'
-import PhotoCarousel from './components/PhotoCarousel'
+import PhotoCarousel, { type CarouselPhoto } from './components/PhotoCarousel'
 import Schedule from './components/Schedule'
 import SpecialThanks from './components/SpecialThanks'
 import QandA from './components/QandA'
@@ -10,6 +10,27 @@ import OurStory from './components/OurStory'
 import Registry from './components/Registry'
 import Footer from './components/Footer'
 import './App.css'
+
+const coolTonePhotos: CarouselPhoto[] = [
+  { src: '/imgs/cool tone 1.JPG', alt: 'Cool tone 1' },
+  { src: '/imgs/cool tone 2.JPG', alt: 'Cool tone 2' },
+  { src: '/imgs/cool tone 3.JPG', alt: 'Cool tone 3' },
+]
+
+const warmTonePhotos: CarouselPhoto[] = [
+  { src: '/imgs/warmish tone.JPG', alt: 'Cool tone 0' },
+  { src: '/imgs/warm tone 1.JPG', alt: 'Cool tone 1' },
+  { src: '/imgs/warm tone 2.JPG', alt: 'Cool tone 2' },
+  { src: '/imgs/warm tone 3.JPG', alt: 'Cool tone 3' },
+
+]
+
+const landscapePhotos: CarouselPhoto[] = [
+  { src: '/imgs/hero 1.JPG', alt: 'Hero 1' },
+  { src: '/imgs/hero 2.JPG', alt: 'Hero 2' },
+  { src: '/imgs/hero 3.JPG', alt: 'Hero 3' },
+  { src: '/imgs/hero 4.JPG', alt: 'Hero 4' },
+]
 
 function App() {
   return (
@@ -27,17 +48,35 @@ function App() {
           <RsvpButton />
         </div>
         <SpecialThanks />
-        <PhotoCarousel />
+        <PhotoCarousel
+          photos={coolTonePhotos}
+          orientation="portrait"
+          label="Portrait"
+        />
         <OurStory />
+      </div>
+      <div className="carousel-fullbleed">
+        <PhotoCarousel
+          photos={landscapePhotos}
+          orientation="landscape"
+          label="Landscape"
+        />
+      </div>
+      <div className="mobile-container mobile-container--continuation">
         <div id="schedule">
           <Schedule />
         </div>
+
+        <PhotoCarousel
+          photos={warmTonePhotos}
+          orientation="portrait"
+          label="Portrait"
+        />
         <div id="qa">
           <QandA />
         </div>
-        <Registry />
-        <div id="moments">
-          <h1>Moments</h1>
+        <div id="registry">
+          <h1>Registry</h1>
           <p>WIP</p>
         </div>
       </div>
