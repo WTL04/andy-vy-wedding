@@ -1,7 +1,15 @@
 .photo-carousel {
   width: 100%;
-  max-width: 600px;
   margin: 60px auto 0;
+}
+
+.photo-carousel--portrait {
+  max-width: 600px;
+}
+
+.photo-carousel--landscape {
+  width: 100%;
+  margin-top: 56px;
 }
 
 .photo-carousel__dots {

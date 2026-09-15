@@ -5,29 +5,25 @@ import {
 } from 'react-stacked-center-carousel'
 import './PhotoCarousel.css'
 
-const photos = [
-  { src: '/imgs/1.JPG', alt: 'Photo 1' },
-  { src: '/imgs/2.JPG', alt: 'Photo 2' },
-  { src: '/imgs/3.JPG', alt: 'Photo 3' },
-  { src: '/imgs/4.JPG', alt: 'Photo 4' },
-  { src: '/imgs/5.JPG', alt: 'Photo 5' },
-  { src: '/imgs/6.JPG', alt: 'Photo 6' },
-  { src: '/imgs/7.JPG', alt: 'Photo 7' },
-  { src: '/imgs/8.JPG', alt: 'Photo 7' },
-  { src: '/imgs/9.JPG', alt: 'Photo 9' },
+export interface CarouselPhoto {
+  src: string
+  alt: string
+}
 
-]
-
-const photosLength = Object.keys(photos).length;
+interface PhotoCarouselProps {
+  photos: CarouselPhoto[]
+  orientation: 'portrait' | 'landscape'
+  label: string
+}
 
 const Card = React.memo(function Card(props: {
-  data: { src: string; alt: string }[]
+  data: CarouselPhoto[]
   dataIndex: number
 }) {
   const { data, dataIndex } = props
   const { src, alt } = data[dataIndex]
   return (
-    <div style={{ width: '100%', height: 1000, userSelect: 'none' }}>
+    <div style={{ width: '100%', height: '100%', userSelect: 'none' }}>
       <img
         style={{
           height: '100%',
@@ -43,30 +39,54 @@ const Card = React.memo(function Card(props: {
   )
 })
 
-export default function PhotoCarousel() {
+export default function PhotoCarousel({
+  photos,
+  orientation,
+  label,
+}: PhotoCarouselProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref = useRef<any>(undefined)
   const [activeSlide, setActiveSlide] = useState(0)
 
+  // StackedCarousel requires odd slide counts, with
+  // currentVisibleSlide <= maxVisibleSlide.
+  const maxVisibleSlide =
+    photos.length % 2 === 1 ? photos.length : photos.length - 1
+
+  const isPortrait = orientation === 'portrait'
+  // Portrait photos are 2:3, landscape photos are 3:2.
+  const aspectRatio = isPortrait ? 1.5 : 2 / 3
+  const desktopSlideWidth = isPortrait ? 560 : 1200
+  const mobileGutter = isPortrait ? 40 : 24
+
   return (
-    <div className="photo-carousel">
+    <div className={`photo-carousel photo-carousel--${orientation}`}>
       <div style={{ width: '100%', position: 'relative' }}>
         <ResponsiveContainer
           carouselRef={ref}
           render={(parentWidth, carouselRef) => {
-            let currentVisibleSlide = 5
-            if (parentWidth <= 1080) currentVisibleSlide = 3
+            let currentVisibleSlide = Math.min(5, maxVisibleSlide)
+            if (parentWidth <= 1080)
+              currentVisibleSlide = Math.min(3, maxVisibleSlide)
             if (parentWidth <= 600) currentVisibleSlide = 1
+            // Never wider than the available track (minus gutter),
+            // so mid-size viewports get a fully visible slide instead
+            // of a cropped fixed-width one.
+            const slideWidth = Math.min(
+              desktopSlideWidth,
+              parentWidth - mobileGutter
+            )
+            const height = Math.round(slideWidth * aspectRatio)
             return (
               <StackedCarousel
                 ref={carouselRef}
                 slideComponent={Card}
-                slideWidth={parentWidth < 800 ? parentWidth - 40 : 750}
+                slideWidth={slideWidth}
                 carouselWidth={parentWidth}
-                height={1000}
+                height={height}
                 data={photos}
                 currentVisibleSlide={currentVisibleSlide}
-                maxVisibleSlide={photosLength}
+                maxVisibleSlide={maxVisibleSlide}
                 useGrabCursor
                 onActiveSlideChange={setActiveSlide}
               />
@@ -79,7 +99,7 @@ export default function PhotoCarousel() {
           <button
             key={index}
             className={`photo-carousel__dot ${index === activeSlide ? 'is-active' : ''}`}
-            aria-label={`Go to photo ${index + 1}`}
+            aria-label={`Go to ${label} photo ${index + 1}`}
           />
         ))}
       </div>

@@ -55,7 +55,7 @@
     background 0.3s ease,
     transform 0.15s ease,
     box-shadow 0.3s ease;
-  margin-bottom: 100px;
+  margin-bottom: 32px;
 }
 
 .rsvp-button:hover {
@@ -79,6 +79,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.carousel-fullbleed {
+  width: 100%;
+  overflow: hidden;
+}
+
+.mobile-container.mobile-container--continuation {
+  min-height: auto;
+  padding-top: 0;
 }
 
 @media (max-width: 800px) {
