@@ -30,7 +30,6 @@ export default function ContributeModal({
   const [amount, setAmount] = useState('')
   const [from, setFrom] = useState('')
   const [method, setMethod] = useState<PaymentMethod>('venmo')
-  const [showFullDesc, setShowFullDesc] = useState(false)
   const [errors, setErrors] = useState<{
     amount?: string
     from?: string
@@ -165,19 +164,7 @@ export default function ContributeModal({
           <>
             <img className="cm-image" src={item.image} alt={item.title} />
             <div className="cm-body">
-              <h2 className="cm-title">
-                {item.title} <span aria-hidden="true">{item.emoji}</span>
-              </h2>
-              <p className="cm-desc">
-                {showFullDesc ? item.longDescription : item.shortDescription}{' '}
-                <button
-                  type="button"
-                  className="cm-readmore"
-                  onClick={() => setShowFullDesc((v) => !v)}
-                >
-                  {showFullDesc ? 'Show less' : 'Read more'}
-                </button>
-              </p>
+              <p className="cm-desc">{item.longDescription}</p>
               <form onSubmit={submitAmount} noValidate>
                 <label className="cm-label" htmlFor="cm-amount">
                   Gift Amount
@@ -222,7 +209,6 @@ export default function ContributeModal({
               </span>
             </div>
             <div className="cm-body">
-              <h2 className="cm-title">Add your details</h2>
               <p className="cm-sub">
                 Please share your details to help Vy &amp; Andy track your
                 gift.
@@ -264,11 +250,7 @@ export default function ContributeModal({
               </span>
             </div>
             <div className="cm-body">
-              <h2 className="cm-title">How would you like to give?</h2>
-              <p className="cm-sub">
-                Vy &amp; Andy would like to receive their gifts using one of
-                the methods below:
-              </p>
+              <p className="cm-sub">How would you like to give?</p>
               <form onSubmit={submitMethod}>
                 <div
                   className="cm-methods"
@@ -278,9 +260,8 @@ export default function ContributeModal({
                   {PAYMENT_METHODS.map((m) => (
                     <label
                       key={m.id}
-                      className={`cm-method${
-                        method === m.id ? ' is-selected' : ''
-                      }`}
+                      className={`cm-method${method === m.id ? ' is-selected' : ''
+                        }`}
                     >
                       <input
                         type="radio"
@@ -310,7 +291,7 @@ export default function ContributeModal({
         {/* ── Step 4: done ────────────────────────────────────── */}
         {step === 'done' && (
           <div className="cm-body cm-done">
-            <h2 className="cm-title">Thank you! 🤍</h2>
+            <h3 className="cm-done__thanks">Thank you! 🤍</h3>
             {(method === 'venmo' || method === 'paypal') && (
               <>
                 <p className="cm-sub">

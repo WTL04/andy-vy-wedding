@@ -26,6 +26,12 @@ body {
   }
 }
 
+/* Stop mobile browsers from auto-inflating text sizes. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 /* Stop elastic sideways panning on touch devices. */
 html,
 body {
