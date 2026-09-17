@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Navbar from './components/Navbar'
 import Monogram from './components/Monogram'
 import CountdownTimer from './components/CountdownTimer'
@@ -9,6 +10,7 @@ import QandA from './components/QandA'
 import OurStory from './components/OurStory'
 import Registry from './components/Registry'
 import Footer from './components/Footer'
+import RsvpModal from './components/RsvpModal'
 import './App.css'
 
 const coolTonePhotos: CarouselPhoto[] = [
@@ -33,9 +35,13 @@ const landscapePhotos: CarouselPhoto[] = [
 ]
 
 function App() {
+  const [isRsvpOpen, setIsRsvpOpen] = useState(false)
+  const openRsvp = () => setIsRsvpOpen(true)
+  const closeRsvp = () => setIsRsvpOpen(false)
+
   return (
     <>
-      <Navbar />
+      <Navbar onRsvpClick={openRsvp} />
       <div className="mobile-container">
         <div id="home">
           <Monogram />
@@ -45,7 +51,7 @@ function App() {
           <CountdownTimer targetDate="2027-02-27T12:00:00-08:00" />
         </div>
         <div id="rsvp">
-          <RsvpButton />
+          <RsvpButton onRsvpClick={openRsvp} />
         </div>
         <SpecialThanks />
         <PhotoCarousel
@@ -78,6 +84,7 @@ function App() {
         <Registry />
       </div>
       <Footer />
+      {isRsvpOpen && <RsvpModal onClose={closeRsvp} />}
     </>
   )
 }

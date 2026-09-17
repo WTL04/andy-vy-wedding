@@ -1,7 +1,9 @@
 import { useState, useCallback } from 'react'
 import './Navbar.css'
 
-const RSVP_URL = 'https://withjoy.com/vyandandy/rsvp'
+interface NavbarProps {
+  onRsvpClick: () => void
+}
 
 const links = [
   { label: 'Home', href: '#home', scrollToTop: true },
@@ -21,7 +23,7 @@ function smoothScroll(href: string, scrollToTop?: boolean) {
   if (el) el.scrollIntoView({ behavior: 'smooth' })
 }
 
-export default function Navbar() {
+export default function Navbar({ onRsvpClick }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const closeMenu = useCallback(() => setMenuOpen(false), [])
@@ -39,14 +41,13 @@ export default function Navbar() {
         >
           Home
         </a>
-        <a
-          className="navbar-link"
-          href={RSVP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          type="button"
+          className="navbar-link navbar-link--button"
+          onClick={onRsvpClick}
         >
           RSVP
-        </a>
+        </button>
         {links.slice(1).map((link) => (
           <a
             key={link.label}
@@ -100,15 +101,16 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <a
-            className="navbar-sidebar-rsvp"
-            href={RSVP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={closeMenu}
+          <button
+            type="button"
+            className="navbar-sidebar-rsvp navbar-sidebar-rsvp--button"
+            onClick={() => {
+              closeMenu()
+              onRsvpClick()
+            }}
           >
             RSVP
-          </a>
+          </button>
         </div>
       </div>
     </nav>

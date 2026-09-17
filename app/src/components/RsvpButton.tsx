@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import "./RsvpButton.css";
 
-const RSVP_URL = "https://withjoy.com/vyandandy/rsvp";
+interface RsvpButtonProps {
+  date?: string;
+  onRsvpClick: () => void;
+}
 
-export default function RsvpButton({ date = "February 27th, 2027" }) {
-  const anchorRef = useRef(null);
+export default function RsvpButton({
+  date = "February 27th, 2027",
+  onRsvpClick,
+}: RsvpButtonProps) {
+  const anchorRef = useRef<HTMLButtonElement | null>(null);
   const [showFloating, setShowFloating] = useState(false);
 
   useEffect(() => {
@@ -30,30 +36,28 @@ export default function RsvpButton({ date = "February 27th, 2027" }) {
 
   return (
     <>
-      <a
+      <button
         ref={anchorRef}
+        type="button"
         className="rsvp-button"
-        href={RSVP_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+        onClick={onRsvpClick}
       >
         RSVP
-      </a>
+      </button>
 
       <div
         className={`rsvp-floating ${showFloating ? "rsvp-floating--visible" : ""}`}
         aria-hidden={!showFloating}
       >
         <span className="rsvp-floating__date">{date}</span>
-        <a
+        <button
+          type="button"
           className="rsvp-floating__button"
-          href={RSVP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+          onClick={onRsvpClick}
           tabIndex={showFloating ? 0 : -1}
         >
           RSVP
-        </a>
+        </button>
       </div>
     </>
   );
