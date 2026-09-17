@@ -86,6 +86,11 @@
   outline-offset: 2px;
 }
 
+/* The RSVP triggers are <button> elements (open the modal). */
+button.rsvp-floating__button {
+  border: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rsvp-floating {
     transition: opacity 0.25s ease;

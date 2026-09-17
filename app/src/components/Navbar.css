@@ -33,6 +33,14 @@
   border-bottom-color: var(--text);
 }
 
+/* RSVP triggers are <button> elements (open the modal). */
+.navbar-link--button {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+
 /* ── Mobile / Tablet ── */
 .navbar-mobile {
   display: none;
@@ -131,6 +139,12 @@
 
 .navbar-sidebar-rsvp:hover {
   background: rgba(255, 255, 255, 0.15);
+}
+
+.navbar-sidebar-rsvp--button {
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
 }
 
 @keyframes fadeIn {
