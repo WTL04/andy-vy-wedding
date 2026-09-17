@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   StackedCarousel,
   ResponsiveContainer,
@@ -14,6 +14,7 @@ interface PhotoCarouselProps {
   photos: CarouselPhoto[]
   orientation: 'portrait' | 'landscape'
   label: string
+  intervalMs?: number
 }
 
 const Card = React.memo(function Card(props: {
@@ -43,10 +44,23 @@ export default function PhotoCarousel({
   photos,
   orientation,
   label,
+  intervalMs = 3000,
 }: PhotoCarouselProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref = useRef<any>(undefined)
   const [activeSlide, setActiveSlide] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+
+  // Auto-advance slides; paused while the user hovers or touch-drags,
+  // and disabled entirely for reduced-motion users.
+  useEffect(() => {
+    if (isPaused) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = window.setInterval(() => {
+      ref.current?.goNext?.()
+    }, intervalMs)
+    return () => window.clearInterval(id)
+  }, [isPaused, intervalMs])
 
   // StackedCarousel requires odd slide counts, with
   // currentVisibleSlide <= maxVisibleSlide.
@@ -61,7 +75,13 @@ export default function PhotoCarousel({
 
   return (
     <div className={`photo-carousel photo-carousel--${orientation}`}>
-      <div style={{ width: '100%', position: 'relative' }}>
+      <div
+        style={{ width: '100%', position: 'relative' }}
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
+      >
         <ResponsiveContainer
           carouselRef={ref}
           render={(parentWidth, carouselRef) => {

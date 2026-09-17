@@ -23,16 +23,13 @@ export const PAYMENT_METHODS: { id: PaymentMethod; label: string }[] = [
 
 export const registry = {
   blurb:
-    'Your presence is the present. But if you would like to bless us with a gift, check out our registry below.',
-  pageUrl: '/registry.html',
-
+    'We do not have a gift registry but for those who wish to give a more sentimental gift, we have put together a wishlist to share. Thank you everyone for making our next chapter a memorable one',
   items: [
     {
       id: 'honeymoon',
       title: 'Honeymoon',
       emoji: '❤️',
-      // TODO: swap for a real honeymoon photo, e.g. '/imgs/honeymoon.jpg'
-      image: '/imgs/1.JPG',
+      image: '/imgs/honeymoon.JPG',
       shortDescription:
         'Your presence alone means the world to us but those who wish to gift a sentimental gift, we truly appreciate your kindness. Thank you fo…',
       longDescription:
@@ -41,7 +38,7 @@ export const registry = {
   ] as RegistryItem[],
 
   payment: {
-    venmoUsername: 'YOUR-VENMO-USERNAME',
+    venmoUsername: 'vyyninhh',
     paypalHandle: 'YOUR-PAYPAL-HANDLE',
     // Zelle has no payment-link API — display only.
     zelleContact: 'you@example.com',

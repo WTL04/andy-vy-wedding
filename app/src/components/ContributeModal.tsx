@@ -1,4 +1,10 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from 'react'
 import {
   PAYMENT_METHODS,
   formatAmount,
@@ -16,8 +22,6 @@ interface ContributeModalProps {
   onClose: () => void
 }
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
 export default function ContributeModal({
   item,
   onClose,
@@ -25,21 +29,39 @@ export default function ContributeModal({
   const [step, setStep] = useState<Step>('amount')
   const [amount, setAmount] = useState('')
   const [from, setFrom] = useState('')
-  const [email, setEmail] = useState('')
   const [method, setMethod] = useState<PaymentMethod>('venmo')
   const [showFullDesc, setShowFullDesc] = useState(false)
   const [errors, setErrors] = useState<{
     amount?: string
     from?: string
-    email?: string
   }>({})
+  const [isClosing, setIsClosing] = useState(false)
+  const closingRef = useRef(false)
+  const closeTimer = useRef<number | null>(null)
 
   const parsedAmount = Number(amount)
+
+  // Clear a pending close timer if the modal unmounts early.
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current !== null) {
+        window.clearTimeout(closeTimer.current)
+      }
+    }
+  }, [])
+
+  // Play the close-out animation first, then unmount.
+  const requestClose = useCallback(() => {
+    if (closingRef.current) return
+    closingRef.current = true
+    setIsClosing(true)
+    closeTimer.current = window.setTimeout(onClose, 180)
+  }, [onClose])
 
   // Close on Escape and lock body scroll while open.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') requestClose()
     }
     document.addEventListener('keydown', onKey)
     const prev = document.body.style.overflow
@@ -48,7 +70,7 @@ export default function ContributeModal({
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = prev
     }
-  }, [onClose])
+  }, [requestClose])
 
   function submitAmount(e: FormEvent) {
     e.preventDefault()
@@ -62,12 +84,12 @@ export default function ContributeModal({
 
   function submitDetails(e: FormEvent) {
     e.preventDefault()
-    const next: { from?: string; email?: string } = {}
-    if (!from.trim()) next.from = 'Let the couple know who this gift is from'
-    if (!email.trim() || !EMAIL_RE.test(email.trim()))
-      next.email = 'Sharing your email is required'
-    setErrors(next)
-    if (Object.keys(next).length === 0) setStep('method')
+    if (!from.trim()) {
+      setErrors({ from: 'Let the couple know who this gift is from' })
+      return
+    }
+    setErrors({})
+    setStep('method')
   }
 
   function submitMethod(e: FormEvent) {
@@ -99,9 +121,12 @@ export default function ContributeModal({
   const safeAmount = Number.isFinite(parsedAmount) ? parsedAmount : 0
 
   return (
-    <div className="cm-overlay" onClick={onClose}>
+    <div
+      className={`cm-overlay${isClosing ? ' is-closing' : ''}`}
+      onClick={requestClose}
+    >
       <div
-        className="cm-modal"
+        className={`cm-modal${isClosing ? ' is-closing' : ''}`}
         role="dialog"
         aria-modal="true"
         aria-label={`Contribute to ${item.title}`}
@@ -129,7 +154,7 @@ export default function ContributeModal({
         <button
           type="button"
           className="cm-close"
-          onClick={onClose}
+          onClick={requestClose}
           aria-label="Close"
         >
           ✕
@@ -217,24 +242,6 @@ export default function ContributeModal({
                 />
                 <p className={`cm-hint ${errors.from ? 'is-error' : ''}`}>
                   {errors.from ?? 'Let the couple know who this gift is from'}
-                </p>
-                <label
-                  className="cm-label cm-label--required"
-                  htmlFor="cm-email"
-                >
-                  Email
-                </label>
-                <input
-                  id="cm-email"
-                  type="email"
-                  className={`cm-input ${errors.email ? 'is-invalid' : ''}`}
-                  placeholder="Your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="email"
-                />
-                <p className={`cm-hint ${errors.email ? 'is-error' : ''}`}>
-                  {errors.email ?? 'Sharing your email is required'}
                 </p>
                 <button type="submit" className="cm-primary">
                   Add Details
@@ -342,7 +349,11 @@ export default function ContributeModal({
             {method === 'cash' && (
               <p className="cm-sub">{registry.payment.cashInstructions}</p>
             )}
-            <button type="button" className="cm-primary" onClick={onClose}>
+            <button
+              type="button"
+              className="cm-primary"
+              onClick={requestClose}
+            >
               Done
             </button>
           </div>

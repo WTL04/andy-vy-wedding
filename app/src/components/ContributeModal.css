@@ -1,4 +1,4 @@
-/* Contribute modal (registry.html). Scoped under .cm-* so it never
+/* Contribute modal. Scoped under .cm-* so it never
    clashes with the main site's theme. */
 
 .cm-overlay {
@@ -342,6 +342,74 @@
   font-style: italic;
   font-size: 15px;
   text-align: center;
+}
+
+/* ── Open / close / step motion ─────────────────────────────── */
+.cm-overlay {
+  animation: cmFadeIn 0.2s ease;
+}
+
+.cm-overlay.is-closing {
+  animation: cmFadeOut 0.18s ease forwards;
+}
+
+.cm-modal {
+  animation: cmPopIn 0.25s ease-out;
+}
+
+.cm-modal.is-closing {
+  animation: cmPopOut 0.18s ease-in forwards;
+}
+
+/* Step content mounts fresh on modal open and on every step change,
+   so it animates in each time. */
+.cm-modal .cm-body,
+.cm-modal .cm-image,
+.cm-modal .cm-imagewrap {
+  animation: cmStepIn 0.18s ease-out;
+}
+
+@keyframes cmFadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes cmFadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes cmPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+  }
+}
+
+@keyframes cmPopOut {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+}
+
+@keyframes cmStepIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-overlay,
+  .cm-modal,
+  .cm-modal .cm-body,
+  .cm-modal .cm-image,
+  .cm-modal .cm-imagewrap {
+    animation: none;
+  }
 }
 
 @media (max-width: 640px) {
