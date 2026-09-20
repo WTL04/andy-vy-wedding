@@ -4,8 +4,9 @@
 //   1. Deploy the script (Execute as: Me, Who has access: Anyone) and put
 //      the /exec URL in VITE_GOOGLE_SHEETS_URL in .env (see .env.example).
 //   2. The script writes one row per party:
-//      Submitted At | Attending? | Guest 1..6 ("First Last" combined),
+//      Submitted At | Guest 1..6 ("First Last" combined),
 //      upserting on the Guest 1 name so resubmissions update in place.
+//      Each guest cell is painted green (attending) or red (declined).
 // Submissions are live whenever the URL is set — empty means local stub.
 // No component changes needed — submitRsvp() is the single integration point.
 

@@ -8,15 +8,16 @@
 //   5. Copy the /exec URL into VITE_GOOGLE_SHEETS_URL in the app's .env.
 //
 // SCHEMA (auto-created header row if the tab is empty):
-//   Submitted At | Attending? | Guest 1 | Guest 2 | Guest 3 | Guest 4 | Guest 5 | Guest 6
+//   Submitted At | Guest 1 | Guest 2 | Guest 3 | Guest 4 | Guest 5 | Guest 6
 // - Each guest is "First Last" combined with a space; unused slots stay blank.
-// - Attending? is party-level: Yes if anyone attends, No if all decline.
-//   (Per-guest answers live in the app payload but have no column here,
-//   so a mixed party shows Yes with every name listed.)
+// - No Attending? column: each guest cell is color-coded instead —
+//   GREEN background = attending, RED background = declined (white text).
 //
 // UPSERT: resubmitting under the same Guest 1 name overwrites that party's
 // row instead of appending — changed answers and added/removed guests update
-// in place. (Name typo fixes orphan the old row; merge those by hand.)
+// in place, colors included (a flipped answer repaints its cell, removed
+// guests' cells are cleared). (Name typo fixes orphan the old row; merge
+// those by hand.)
 //
 // NOTE: renders timestamps in the spreadsheet's time zone --
 // set File -> Settings -> Time zone to (GMT-08:00) Los Angeles.
@@ -27,14 +28,18 @@
 const SHEET_NAME = 'RSVPs';
 const HEADERS = [
   'Submitted At',
-  'Attending?',
   'Guest 1',
   'Guest 2',
   'Guest 3',
   'Guest 4',
   'Guest 5',
   'Guest 6',
-];
+ ];
+
+const GREEN_BG = '#34a853';
+const RED_BG = '#ea4335';
+const WHITE_INK = '#ffffff';
+const DEFAULT_INK = '#000000';
 
 // Normalized identity key: same person resubmitting hits the same party.
 function normalizeName(s) {
@@ -77,15 +82,24 @@ function doPost(e) {
         JSON.stringify({ ok: false, error: 'no-guests' })
       ).setMimeType(ContentService.MimeType.JSON);
     }
-    const names = guests.map(fullName);
+    const listed = guests.slice(0, 6);
+    const names = listed.map(fullName);
     while (names.length < 6) names.push('');
     // Real Date (not text) so the column still sorts chronologically.
     const submitted = data.submittedAt ? new Date(data.submittedAt) : new Date();
-    const rowValues = [
-      submitted,
-      data.attending === true ? 'Yes' : 'No',
-      ...names.slice(0, 6),
-    ];
+    const rowValues = [submitted, ...names];
+    // Per-guest colors: green = attending, red = declined, blank = empty slot.
+    const backgrounds = [null];
+    const fontColors = [null];
+    listed.forEach((g) => {
+      const ok = g.attending === true;
+      backgrounds.push(ok ? GREEN_BG : RED_BG);
+      fontColors.push(WHITE_INK);
+    });
+    while (backgrounds.length < 7) {
+      backgrounds.push(null);
+      fontColors.push(DEFAULT_INK);
+    }
     // Upsert on Guest 1 combined name: a resubmission (changed answers,
     // added or removed guests) overwrites the party's row in place.
     const key = normalizeName(names[0]);
@@ -93,8 +107,8 @@ function doPost(e) {
     if (key !== '') {
       const values = sheet.getDataRange().getValues();
       for (let r = 1; r < values.length; r++) {
-        // skip header
-        if (normalizeName(values[r][2]) === key) {
+        // skip header (Guest 1 is now column B)
+        if (normalizeName(values[r][1]) === key) {
           row = r + 1;
           break;
         }
@@ -107,6 +121,8 @@ function doPost(e) {
       row = sheet.getLastRow();
     }
     sheet.getRange(row, 1).setNumberFormat('mm/dd/yyyy - h:mm AM/PM');
+    sheet.getRange(row, 1, 1, rowValues.length).setBackgrounds([backgrounds]);
+    sheet.getRange(row, 1, 1, rowValues.length).setFontColors([fontColors]);
     return ContentService.createTextOutput(
       JSON.stringify({ ok: true, guests: guests.length })
     ).setMimeType(ContentService.MimeType.JSON);
