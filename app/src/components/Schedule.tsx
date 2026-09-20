@@ -41,15 +41,6 @@ export default function Schedule() {
           </a>
         </div>
       </div>
-
-      <div className="dress-code">
-        <img
-          className="dress-code-icon"
-          src="/icons/hanger.png"
-          alt="Dress code"
-        />
-        <p>Please no wine, burgundy, rustic, taupe, umber, or white colors :)</p>
-      </div>
     </div>
   )
 }
