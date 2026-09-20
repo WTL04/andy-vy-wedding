@@ -8,7 +8,6 @@ import {
 import {
   PAYMENT_METHODS,
   formatAmount,
-  paypalUrl,
   registry,
   venmoUrl,
   type PaymentMethod,
@@ -91,30 +90,18 @@ export default function ContributeModal({
     setStep('method')
   }
 
-  function submitMethod(e: FormEvent) {
-    e.preventDefault()
-    if (method === 'venmo') {
-      window.open(
-        venmoUrl(parsedAmount, from.trim()),
-        '_blank',
-        'noopener,noreferrer'
-      )
-    } else if (method === 'paypal') {
-      window.open(paypalUrl(parsedAmount), '_blank', 'noopener,noreferrer')
-    }
-    setStep('done')
+  function openVenmo() {
+    window.open(
+      venmoUrl(parsedAmount, from.trim()),
+      '_blank',
+      'noopener,noreferrer'
+    )
   }
 
-  function reopenPayment() {
-    if (method === 'venmo') {
-      window.open(
-        venmoUrl(parsedAmount, from.trim()),
-        '_blank',
-        'noopener,noreferrer'
-      )
-    } else if (method === 'paypal') {
-      window.open(paypalUrl(parsedAmount), '_blank', 'noopener,noreferrer')
-    }
+  function submitMethod(e: FormEvent) {
+    e.preventDefault()
+    if (method === 'venmo') openVenmo()
+    setStep('done')
   }
 
   const safeAmount = Number.isFinite(parsedAmount) ? parsedAmount : 0
@@ -292,19 +279,19 @@ export default function ContributeModal({
         {step === 'done' && (
           <div className="cm-body cm-done">
             <h3 className="cm-done__thanks">Thank you! 🤍</h3>
-            {(method === 'venmo' || method === 'paypal') && (
+            {method === 'venmo' && (
               <>
                 <p className="cm-sub">
-                  We opened {method === 'venmo' ? 'Venmo' : 'PayPal'} in a new
-                  tab to complete your {formatAmount(safeAmount)} gift
+                  We opened Venmo in a new tab to complete your{' '}
+                  {formatAmount(safeAmount)} gift
                   {from.trim() ? ` from ${from.trim()}` : ''}.
                 </p>
                 <button
                   type="button"
                   className="cm-link"
-                  onClick={reopenPayment}
+                  onClick={openVenmo}
                 >
-                  Open {method === 'venmo' ? 'Venmo' : 'PayPal'} again
+                  Open Venmo again
                 </button>
               </>
             )}
@@ -326,9 +313,6 @@ export default function ContributeModal({
                   </div>
                 )}
               </>
-            )}
-            {method === 'cash' && (
-              <p className="cm-sub">{registry.payment.cashInstructions}</p>
             )}
             <button
               type="button"

@@ -12,13 +12,11 @@ export interface RegistryItem {
   longDescription: string
 }
 
-export type PaymentMethod = 'venmo' | 'paypal' | 'zelle' | 'cash'
+export type PaymentMethod = 'venmo' | 'zelle'
 
 export const PAYMENT_METHODS: { id: PaymentMethod; label: string }[] = [
   { id: 'venmo', label: 'Venmo' },
-  { id: 'paypal', label: 'PayPal' },
   { id: 'zelle', label: 'Zelle' },
-  { id: 'cash', label: 'Cash / Check' },
 ]
 
 export const registry = {
@@ -39,14 +37,11 @@ export const registry = {
 
   payment: {
     venmoUsername: 'vyyninhh',
-    paypalHandle: 'YOUR-PAYPAL-HANDLE',
-    // Zelle has no payment-link API — display only.
-    zelleContact: 'you@example.com',
+    // Zelle has no payment-link API, display only.
+    zelleContact: 'vyyninhh@gmail.com',
     // Drop your bank-generated Zelle QR image in public/imgs/ and set this
     // to '/imgs/zelle-qr.png'. Leave empty to show a placeholder box.
-    zelleQrSrc: '' as string | undefined,
-    cashInstructions:
-      'Please hand your gift to Vy or Andy in person, or mail it to the address on your invitation.',
+    zelleQrSrc: '/imgs/vyyninhh_zelle.png' as string | undefined,
   },
 }
 
@@ -61,12 +56,7 @@ export function venmoUrl(amount: number, from: string): string {
     txn: 'pay',
     recipients: registry.payment.venmoUsername,
     amount: amount.toFixed(2),
-    note: `${from} — Vy & Andy Wedding Gift`,
+    note: `${from} - Vy & Andy Wedding Gift`,
   })
   return `https://venmo.com/?${params.toString()}`
-}
-
-// PayPal.me accepts the amount as the last path segment.
-export function paypalUrl(amount: number): string {
-  return `https://paypal.me/${registry.payment.paypalHandle}/${amount.toFixed(2)}`
 }
