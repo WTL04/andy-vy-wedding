@@ -1,16 +1,20 @@
 // RSVP response model + submission seam.
 //
-// Google Sheets integration:
-//   1. Create a Google Apps Script Web App whose doPost() appends a row
-//      [submittedAt, attending, guest1First, guest1Last, guest2First, guest2Last].
-//   2. Deploy it (Execute as: Me, Who has access: Anyone) and put the
-//      /exec URL in VITE_GOOGLE_SHEETS_URL in .env (see .env.example).
+// Google Sheets integration (see apps-script/rsvp.gs):
+//   1. Deploy the script (Execute as: Me, Who has access: Anyone) and put
+//      the /exec URL in VITE_GOOGLE_SHEETS_URL in .env (see .env.example).
+//   2. The script writes one row per party:
+//      Submitted At | Attending? | Guest 1..6 ("First Last" combined),
+//      upserting on the Guest 1 name so resubmissions update in place.
 // Submissions are live whenever the URL is set — empty means local stub.
 // No component changes needed — submitRsvp() is the single integration point.
+
+export const MAX_GUESTS = 6
 
 export interface RsvpGuest {
   firstName: string
   lastName: string
+  attending: boolean
 }
 
 export interface RsvpResponse {

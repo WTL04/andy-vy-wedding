@@ -1,4 +1,4 @@
-// Wedding RSVP -> Google Sheet writer.
+// Wedding RSVP -> Google Sheet writer (one row per party).
 //
 // SETUP (one time, in your Google account):
 //   1. Open your spreadsheet -> Extensions -> Apps Script.
@@ -7,8 +7,19 @@
 //   4. Execute as: Me. Who has access: Anyone. Deploy.
 //   5. Copy the /exec URL into VITE_GOOGLE_SHEETS_URL in the app's .env.
 //
-// The sheet tab below must exist (or it will be created) with headers:
-//   Submitted At | Attending? | Guest First Name | Guest Last Name | Plus 1 First Name | Plus 1 Last Name
+// SCHEMA (auto-created header row if the tab is empty):
+//   Submitted At | Attending? | Guest 1 | Guest 2 | Guest 3 | Guest 4 | Guest 5 | Guest 6
+// - Each guest is "First Last" combined with a space; unused slots stay blank.
+// - Attending? is party-level: Yes if anyone attends, No if all decline.
+//   (Per-guest answers live in the app payload but have no column here,
+//   so a mixed party shows Yes with every name listed.)
+//
+// UPSERT: resubmitting under the same Guest 1 name overwrites that party's
+// row instead of appending — changed answers and added/removed guests update
+// in place. (Name typo fixes orphan the old row; merge those by hand.)
+//
+// NOTE: renders timestamps in the spreadsheet's time zone --
+// set File -> Settings -> Time zone to (GMT-08:00) Los Angeles.
 //
 // IMPORTANT: after ANY edit to this script, Deploy -> Manage deployments ->
 // New version -- otherwise the live URL keeps serving the old code.
@@ -17,13 +28,15 @@ const SHEET_NAME = 'RSVPs';
 const HEADERS = [
   'Submitted At',
   'Attending?',
-  'Guest First Name',
-  'Guest Last Name',
-  'Plus 1 First Name',
-  'Plus 1 Last Name',
+  'Guest 1',
+  'Guest 2',
+  'Guest 3',
+  'Guest 4',
+  'Guest 5',
+  'Guest 6',
 ];
 
-// Normalized identity key: same person resubmitting hits the same row.
+// Normalized identity key: same person resubmitting hits the same party.
 function normalizeName(s) {
   return String(s || '')
     .trim()
@@ -31,8 +44,20 @@ function normalizeName(s) {
     .replace(/\s+/g, ' ');
 }
 
-// FUTURE (invite-list cross-check): look the key up in a roster tab here
-// and return { ok: false, error: 'not-invited' } when absent.
+// Display name: trimmed + single spaces, original capitalization kept
+// (unlike normalizeName, which lowercases for key matching only).
+function fullName(g) {
+  const first = String(g.firstName || '')
+    .trim()
+    .replace(/\s+/g, ' ');
+  const last = String(g.lastName || '')
+    .trim()
+    .replace(/\s+/g, ' ');
+  return (first + ' ' + last).trim();
+}
+
+// FUTURE (invite-list cross-check): look the party key up in a roster tab
+// here and return { ok: false, error: 'not-invited' } when absent.
 function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.waitLock(10000); // prevents lost rows if two guests submit at once
@@ -47,33 +72,29 @@ function doPost(e) {
     }
     const data = JSON.parse(e.postData.contents);
     const guests = Array.isArray(data.guests) ? data.guests : [];
-    const g1 = guests[0] || {};
-    const g2 = guests[1] || {};
+    if (guests.length === 0) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: false, error: 'no-guests' })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+    const names = guests.map(fullName);
+    while (names.length < 6) names.push('');
     // Real Date (not text) so the column still sorts chronologically.
-    // Displayed via number format below, e.g. 09/16/2026 - 11:46 PM.
-    // NOTE: renders in the spreadsheet's time zone --
-    // set File -> Settings -> Time zone to (GMT-08:00) Los Angeles.
     const submitted = data.submittedAt ? new Date(data.submittedAt) : new Date();
     const rowValues = [
       submitted,
       data.attending === true ? 'Yes' : 'No',
-      g1.firstName || '',
-      g1.lastName || '',
-      g2.firstName || '',
-      g2.lastName || '',
+      ...names.slice(0, 6),
     ];
-    // Upsert on guest-1 name: a resubmission (changed attending, added or
-    // removed plus-one) overwrites the existing row instead of appending.
-    const key =
-      normalizeName(g1.firstName) + '|' + normalizeName(g1.lastName);
+    // Upsert on Guest 1 combined name: a resubmission (changed answers,
+    // added or removed guests) overwrites the party's row in place.
+    const key = normalizeName(names[0]);
     let row = -1;
-    if (key !== '|') {
+    if (key !== '') {
       const values = sheet.getDataRange().getValues();
       for (let r = 1; r < values.length; r++) {
         // skip header
-        const rowKey =
-          normalizeName(values[r][2]) + '|' + normalizeName(values[r][3]);
-        if (rowKey === key) {
+        if (normalizeName(values[r][2]) === key) {
           row = r + 1;
           break;
         }
@@ -86,9 +107,9 @@ function doPost(e) {
       row = sheet.getLastRow();
     }
     sheet.getRange(row, 1).setNumberFormat('mm/dd/yyyy - h:mm AM/PM');
-    return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(
-      ContentService.MimeType.JSON
-    );
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: true, guests: guests.length })
+    ).setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
     return ContentService.createTextOutput(
       JSON.stringify({ ok: false, error: String(err) })

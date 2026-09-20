@@ -7,6 +7,7 @@ import {
 } from 'react'
 import './RsvpModal.css'
 import {
+  MAX_GUESTS,
   submitRsvp,
   type RsvpGuest,
   type RsvpResponse,
@@ -18,20 +19,18 @@ interface RsvpModalProps {
   onClose: () => void
 }
 
+interface GuestForm {
+  first: string
+  last: string
+  attending: boolean
+}
+
+const emptyGuest = (): GuestForm => ({ first: '', last: '', attending: true })
+
 export default function RsvpModal({ onClose }: RsvpModalProps) {
   const [step, setStep] = useState<Step>('names')
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [hasPlusOne, setHasPlusOne] = useState(false)
-  const [plusFirst, setPlusFirst] = useState('')
-  const [plusLast, setPlusLast] = useState('')
-  const [attending, setAttending] = useState<boolean | null>(null)
-  const [errors, setErrors] = useState<{
-    firstName?: string
-    lastName?: string
-    plusFirst?: string
-    plusLast?: string
-  }>({})
+  const [guests, setGuests] = useState<GuestForm[]>([emptyGuest()])
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const [isClosing, setIsClosing] = useState(false)
   const closingRef = useRef(false)
   const closeTimer = useRef<number | null>(null)
@@ -67,58 +66,60 @@ export default function RsvpModal({ onClose }: RsvpModalProps) {
     }
   }, [requestClose])
 
+  function updateGuest(index: number, patch: Partial<GuestForm>) {
+    setGuests((prev) =>
+      prev.map((g, i) => (i === index ? { ...g, ...patch } : g))
+    )
+  }
+
+  function addGuest() {
+    setGuests((prev) =>
+      prev.length >= MAX_GUESTS ? prev : [...prev, emptyGuest()]
+    )
+  }
+
+  function removeGuest(index: number) {
+    setGuests((prev) =>
+      prev.length <= 1 ? prev : prev.filter((_, i) => i !== index)
+    )
+    setErrors({})
+  }
+
   function submitNames(e: FormEvent) {
     e.preventDefault()
-    const next: {
-      firstName?: string
-      lastName?: string
-      plusFirst?: string
-      plusLast?: string
-    } = {}
-    if (!firstName.trim()) next.firstName = 'Please enter your first name'
-    if (!lastName.trim()) next.lastName = 'Please enter your last name'
-    if (hasPlusOne) {
-      if (!plusFirst.trim())
-        next.plusFirst = "Please enter your plus one's first name"
-      if (!plusLast.trim())
-        next.plusLast = "Please enter your plus one's last name"
-    }
+    const next: Record<string, string> = {}
+    guests.forEach((g, i) => {
+      const n = i + 1
+      if (!g.first.trim())
+        next[`${i}.first`] = `Please enter guest ${n}'s first name`
+      if (!g.last.trim())
+        next[`${i}.last`] = `Please enter guest ${n}'s last name`
+    })
     setErrors(next)
     if (Object.keys(next).length === 0) setStep('response')
   }
 
-  function removePlusOne() {
-    setHasPlusOne(false)
-    setPlusFirst('')
-    setPlusLast('')
-    setErrors((prev) => {
-      const next = { ...prev }
-      delete next.plusFirst
-      delete next.plusLast
-      return next
-    })
-  }
-
-  function choose(attendingChoice: boolean) {
-    const guests: RsvpGuest[] = [
-      { firstName: firstName.trim(), lastName: lastName.trim() },
-    ]
-    if (hasPlusOne) {
-      guests.push({ firstName: plusFirst.trim(), lastName: plusLast.trim() })
-    }
+  function submitResponse(e: FormEvent) {
+    e.preventDefault()
+    const trimmed: RsvpGuest[] = guests.map((g) => ({
+      firstName: g.first.trim(),
+      lastName: g.last.trim(),
+      attending: g.attending,
+    }))
     const response: RsvpResponse = {
-      guests,
-      attending: attendingChoice,
+      guests: trimmed,
+      attending: trimmed.some((g) => g.attending),
       submittedAt: new Date().toISOString(),
     }
     // Fire-and-forget: never block the thank-you screen.
     void submitRsvp(response)
-    setAttending(attendingChoice)
     setStep('done')
   }
 
+  const attendingCount = guests.filter((g) => g.attending).length
   const guestLabel =
-    `${firstName.trim()} ${lastName.trim()}`.trim() || 'Guest'
+    `${guests[0]?.first.trim() ?? ''} ${guests[0]?.last.trim() ?? ''}`.trim() ||
+    'Guest'
 
   return (
     <div
@@ -151,109 +152,83 @@ export default function RsvpModal({ onClose }: RsvpModalProps) {
               Garden Grove, California
             </p>
             <form onSubmit={submitNames} noValidate>
-              <div className="rv-row">
-                <div className="rv-field">
-                  <label className="rv-label" htmlFor="rv-first">
-                    First name
-                  </label>
-                  <input
-                    id="rv-first"
-                    type="text"
-                    className={`rv-input ${errors.firstName ? 'is-invalid' : ''}`}
-                    placeholder="Vy"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    autoComplete="given-name"
-                    autoFocus
-                  />
-                  {errors.firstName && (
-                    <p className="rv-error" role="alert">
-                      {errors.firstName}
-                    </p>
-                  )}
-                </div>
-                <div className="rv-field">
-                  <label className="rv-label" htmlFor="rv-last">
-                    Last name
-                  </label>
-                  <input
-                    id="rv-last"
-                    type="text"
-                    className={`rv-input ${errors.lastName ? 'is-invalid' : ''}`}
-                    placeholder="Nguyen"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    autoComplete="family-name"
-                  />
-                  {errors.lastName && (
-                    <p className="rv-error" role="alert">
-                      {errors.lastName}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {hasPlusOne ? (
-                <div className="rv-plusone">
-                  <div className="rv-plusone__head">
-                    <span className="rv-plusone__title">Plus one</span>
-                    <button
-                      type="button"
-                      className="rv-link"
-                      onClick={removePlusOne}
-                    >
-                      Remove
-                    </button>
+              {guests.map((g, i) => (
+                <div key={i} className="rv-guest">
+                  <div className="rv-guest__head">
+                    <span className="rv-guest__title">Guest {i + 1}</span>
+                    {guests.length > 1 && (
+                      <button
+                        type="button"
+                        className="rv-link"
+                        onClick={() => removeGuest(i)}
+                      >
+                        Remove
+                      </button>
+                    )}
                   </div>
                   <div className="rv-row">
                     <div className="rv-field">
-                      <label className="rv-label" htmlFor="rv-plus-first">
+                      <label
+                        className="rv-label"
+                        htmlFor={`rv-first-${i}`}
+                      >
                         First name
                       </label>
                       <input
-                        id="rv-plus-first"
+                        id={`rv-first-${i}`}
                         type="text"
-                        className={`rv-input ${errors.plusFirst ? 'is-invalid' : ''}`}
-                        placeholder="Andy"
-                        value={plusFirst}
-                        onChange={(e) => setPlusFirst(e.target.value)}
-                        autoComplete="off"
+                        className={`rv-input ${errors[`${i}.first`] ? 'is-invalid' : ''}`}
+                        placeholder="Vy"
+                        value={g.first}
+                        onChange={(e) =>
+                          updateGuest(i, { first: e.target.value })
+                        }
+                        autoComplete={i === 0 ? 'given-name' : 'off'}
+                        autoFocus={i === 0}
                       />
-                      {errors.plusFirst && (
+                      {errors[`${i}.first`] && (
                         <p className="rv-error" role="alert">
-                          {errors.plusFirst}
+                          {errors[`${i}.first`]}
                         </p>
                       )}
                     </div>
                     <div className="rv-field">
-                      <label className="rv-label" htmlFor="rv-plus-last">
+                      <label className="rv-label" htmlFor={`rv-last-${i}`}>
                         Last name
                       </label>
                       <input
-                        id="rv-plus-last"
+                        id={`rv-last-${i}`}
                         type="text"
-                        className={`rv-input ${errors.plusLast ? 'is-invalid' : ''}`}
-                        placeholder="Phan"
-                        value={plusLast}
-                        onChange={(e) => setPlusLast(e.target.value)}
-                        autoComplete="off"
+                        className={`rv-input ${errors[`${i}.last`] ? 'is-invalid' : ''}`}
+                        placeholder="Nguyen"
+                        value={g.last}
+                        onChange={(e) =>
+                          updateGuest(i, { last: e.target.value })
+                        }
+                        autoComplete={i === 0 ? 'family-name' : 'off'}
                       />
-                      {errors.plusLast && (
+                      {errors[`${i}.last`] && (
                         <p className="rv-error" role="alert">
-                          {errors.plusLast}
+                          {errors[`${i}.last`]}
                         </p>
                       )}
                     </div>
                   </div>
                 </div>
-              ) : (
+              ))}
+
+              {guests.length < MAX_GUESTS ? (
                 <button
                   type="button"
                   className="rv-link rv-addone"
-                  onClick={() => setHasPlusOne(true)}
+                  onClick={addGuest}
                 >
-                  + Add a plus one
+                  + Add a guest ({guests.length} of {MAX_GUESTS})
                 </button>
+              ) : (
+                <p className="rv-cap">
+                  Maximum of {MAX_GUESTS} guests per RSVP.
+                </p>
               )}
 
               <button type="submit" className="rv-primary">
@@ -263,34 +238,57 @@ export default function RsvpModal({ onClose }: RsvpModalProps) {
           </div>
         )}
 
-        {/* ── Step 2: response ──────────────────────────────── */}
+        {/* ── Step 2: per-guest response ─────────────────────── */}
         {step === 'response' && (
-          <div className="rv-body rv-body--center">
-            <h2 className="rv-title">{guestLabel}, will you be joining us?</h2>
+          <div className="rv-body">
+            <h2 className="rv-title">Who&apos;s joining us?</h2>
             <p className="rv-sub">
-              Please choose one option for your party.
+              Set each guest below, then continue.
             </p>
-            <button
-              type="button"
-              className="rv-choice"
-              onClick={() => choose(true)}
-            >
-              Joyfully Accept
-            </button>
-            <button
-              type="button"
-              className="rv-choice rv-choice--decline"
-              onClick={() => choose(false)}
-            >
-              Regretfully Decline
-            </button>
+            <form onSubmit={submitResponse}>
+              {guests.map((g, i) => {
+                const name =
+                  `${g.first.trim()} ${g.last.trim()}`.trim() ||
+                  `Guest ${i + 1}`
+                return (
+                  <div key={i} className="rv-rsvp-row">
+                    <span className="rv-rsvp-name">{name}</span>
+                    <div
+                      className="rv-toggle"
+                      role="group"
+                      aria-label={`Attendance for ${name}`}
+                    >
+                      <button
+                        type="button"
+                        className={g.attending ? 'is-selected' : ''}
+                        aria-pressed={g.attending}
+                        onClick={() => updateGuest(i, { attending: true })}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        type="button"
+                        className={!g.attending ? 'is-selected' : ''}
+                        aria-pressed={!g.attending}
+                        onClick={() => updateGuest(i, { attending: false })}
+                      >
+                        Decline
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
+              <button type="submit" className="rv-primary">
+                Continue
+              </button>
+            </form>
           </div>
         )}
 
         {/* ── Step 3: confirmation ──────────────────────────── */}
         {step === 'done' && (
           <div className="rv-body rv-body--center">
-            {attending ? (
+            {attendingCount === guests.length ? (
               <>
                 <h2 className="rv-title">We can&apos;t wait! 🤍</h2>
                 <p className="rv-sub">
@@ -298,12 +296,21 @@ export default function RsvpModal({ onClose }: RsvpModalProps) {
                   — we&apos;ll see you on February 27th!
                 </p>
               </>
-            ) : (
+            ) : attendingCount === 0 ? (
               <>
                 <h2 className="rv-title">You&apos;ll be missed</h2>
                 <p className="rv-sub">
                   Thank you for letting us know, {guestLabel}. Your response
                   has been recorded.
+                </p>
+              </>
+            ) : (
+              <>
+                <h2 className="rv-title">Thank you! 🤍</h2>
+                <p className="rv-sub">
+                  {attendingCount} of {guests.length} attending — your
+                  response has been recorded. We&apos;ll see you on February
+                  27th!
                 </p>
               </>
             )}

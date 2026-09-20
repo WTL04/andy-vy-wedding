@@ -23,9 +23,10 @@
   position: relative;
   width: 100%;
   max-width: 520px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
   background: #ffffff;
   border-radius: 20px;
-  overflow: hidden;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
   color: #1a1a1a;
   animation: rvPopIn 0.25s ease-out;
@@ -124,20 +125,26 @@
   margin-top: 6px;
 }
 
-.rv-plusone {
+.rv-guest {
   margin-top: 24px;
   border-top: 1px solid #e5e5e5;
   padding-top: 20px;
 }
 
-.rv-plusone__head {
+.rv-guest:first-of-type {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+}
+
+.rv-guest__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
 }
 
-.rv-plusone__title {
+.rv-guest__title {
   font-size: 17px;
   font-weight: 700;
   color: #1a1a1a;
@@ -184,37 +191,61 @@
   background: #35352f;
 }
 
-.rv-choice {
-  display: block;
-  width: 100%;
-  background: #1c1c1a;
-  color: #ffffff;
-  border: 1.5px solid #1c1c1a;
-  border-radius: 999px;
-  padding: 16px 24px;
+.rv-rsvp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.rv-rsvp-row:last-of-type {
+  border-bottom: none;
+}
+
+.rv-rsvp-name {
   font-size: 19px;
-  font-weight: 700;
+  font-weight: 600;
+  color: #1a1a1a;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rv-toggle {
+  display: flex;
+  flex-shrink: 0;
+  border: 1.5px solid #1a1a1a;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.rv-toggle button {
+  border: none;
+  background: transparent;
+  padding: 8px 18px;
   font-family: var(--font-body);
-  letter-spacing: 0.5px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
   cursor: pointer;
-  margin-bottom: 12px;
   transition:
     background 0.2s ease,
     color 0.2s ease;
 }
 
-.rv-choice:hover {
-  background: #35352f;
+.rv-toggle button.is-selected {
+  background: #1c1c1a;
+  color: #ffffff;
 }
 
-.rv-choice--decline {
-  background: transparent;
-  color: #1a1a1a;
-  margin-bottom: 0;
-}
-
-.rv-choice--decline:hover {
-  background: rgba(0, 0, 0, 0.06);
+.rv-cap {
+  font-size: 15px;
+  font-style: italic;
+  color: #555555;
+  margin-top: 20px;
 }
 
 @keyframes rvFadeIn {
@@ -269,5 +300,22 @@
 
   .rv-row {
     flex-direction: column;
+  }
+
+  .rv-rsvp-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rv-rsvp-name {
+    white-space: normal;
+  }
+
+  .rv-toggle {
+    width: 100%;
+  }
+
+  .rv-toggle button {
+    flex: 1;
   }
 }
