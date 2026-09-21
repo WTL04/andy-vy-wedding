@@ -39,7 +39,6 @@ const HEADERS = [
 const GREEN_BG = '#34a853';
 const RED_BG = '#ea4335';
 const WHITE_INK = '#ffffff';
-const DEFAULT_INK = '#000000';
 
 // Normalized identity key: same person resubmitting hits the same party.
 function normalizeName(s) {
@@ -88,18 +87,6 @@ function doPost(e) {
     // Real Date (not text) so the column still sorts chronologically.
     const submitted = data.submittedAt ? new Date(data.submittedAt) : new Date();
     const rowValues = [submitted, ...names];
-    // Per-guest colors: green = attending, red = declined, blank = empty slot.
-    const backgrounds = [null];
-    const fontColors = [null];
-    listed.forEach((g) => {
-      const ok = g.attending === true;
-      backgrounds.push(ok ? GREEN_BG : RED_BG);
-      fontColors.push(WHITE_INK);
-    });
-    while (backgrounds.length < 7) {
-      backgrounds.push(null);
-      fontColors.push(DEFAULT_INK);
-    }
     // Upsert on Guest 1 combined name: a resubmission (changed answers,
     // added or removed guests) overwrites the party's row in place.
     const key = normalizeName(names[0]);
@@ -121,8 +108,17 @@ function doPost(e) {
       row = sheet.getLastRow();
     }
     sheet.getRange(row, 1).setNumberFormat('mm/dd/yyyy - h:mm AM/PM');
-    sheet.getRange(row, 1, 1, rowValues.length).setBackgrounds([backgrounds]);
-    sheet.getRange(row, 1, 1, rowValues.length).setFontColors([fontColors]);
+    // Per-guest colors on filled cells only (no nulls — some Sheets builds
+    // reject null entries): green = attending, red = declined, white text.
+    // Stale formatting on now-empty slots is cleared so resubmits repaint.
+    if (listed.length < 6) {
+      sheet.getRange(row, 2 + listed.length, 1, 6 - listed.length).clearFormat();
+    }
+    const filled = sheet.getRange(row, 2, 1, listed.length);
+    filled.setBackgrounds([
+      listed.map((g) => (g.attending === true ? GREEN_BG : RED_BG)),
+    ]);
+    filled.setFontColors([listed.map(() => WHITE_INK)]);
     return ContentService.createTextOutput(
       JSON.stringify({ ok: true, guests: guests.length })
     ).setMimeType(ContentService.MimeType.JSON);
