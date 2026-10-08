@@ -22,10 +22,10 @@ const faqs = [
   },
   {
     question: 'What should I wear?',
-    answerBefore: 'Ladies ~ No white, rustic, taupe, umber or bronzer dresses',
+    answerBefore: 'Ladies ~ No white or bronzer dresses',
     highlight: '',
     answerAfter: '',
-    subtext: 'Gentlemen ~ No sage / olive color suits'
+    subtext: 'Gentlemen ~ No sage or olive color suits'
   },
 ]
 
