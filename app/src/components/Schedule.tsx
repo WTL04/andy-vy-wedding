@@ -4,6 +4,7 @@ export default function Schedule() {
   return (
     <div className="schedule">
       <h1>Schedule</h1>
+      <p className="schedule-reminder">Reminder: please arrive 15 minutes early</p>
       <p className="schedule-date">Saturday, February 27, 2027</p>
 
       <div className="schedule-event">
