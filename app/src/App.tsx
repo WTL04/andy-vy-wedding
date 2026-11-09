@@ -11,6 +11,8 @@ import OurStory from './components/OurStory'
 import Registry from './components/Registry'
 import Footer from './components/Footer'
 import RsvpModal from './components/RsvpModal'
+import PasswordGate from './components/PasswordGate'
+import { hasGateCookie } from './lib/gateCookie'
 import './App.css'
 
 const coolTonePhotos: CarouselPhoto[] = [
@@ -36,8 +38,17 @@ const landscapePhotos: CarouselPhoto[] = [
 
 function App() {
   const [isRsvpOpen, setIsRsvpOpen] = useState(false)
+  // Frontend-only gate: unlocked when the remember cookie is present.
+  // If VITE_SITE_PASSWORD is unset, the site stays open to avoid lockouts.
+  const [unlocked, setUnlocked] = useState(
+    () => import.meta.env.VITE_SITE_PASSWORD === undefined || hasGateCookie(),
+  )
   const openRsvp = () => setIsRsvpOpen(true)
   const closeRsvp = () => setIsRsvpOpen(false)
+
+  if (!unlocked) {
+    return <PasswordGate onUnlock={() => setUnlocked(true)} />
+  }
 
   return (
     <>
