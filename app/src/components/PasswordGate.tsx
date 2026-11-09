@@ -41,9 +41,7 @@ export default function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
   return (
     <div className="gate">
       <form className="gate-card" onSubmit={handleSubmit}>
-        <p className="gate-names">Vy &amp; Andy</p>
-        <h1 className="gate-title">You are Invited!</h1>
-        <p className="gate-subtitle">Please enter the password to view our wedding site.</p>
+        <p className="gate-subtitle">Please enter the password to view </p>
         <input
           className="gate-input"
           type="password"
