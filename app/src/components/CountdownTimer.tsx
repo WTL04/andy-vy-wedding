@@ -34,7 +34,13 @@ export default function CountdownTimer({ targetDate }: Props) {
 
   return (
     <p className="countdown">
-      {timeLeft.days} days : {timeLeft.hours} hrs : {timeLeft.minutes} mins : {timeLeft.seconds} secs
+      <span className="countdown-unit">{timeLeft.days} days</span>
+      <span aria-hidden="true">:</span>
+      <span className="countdown-unit">{timeLeft.hours} hrs</span>
+      <span aria-hidden="true">:</span>
+      <span className="countdown-unit">{timeLeft.minutes} mins</span>
+      <span aria-hidden="true">:</span>
+      <span className="countdown-unit">{timeLeft.seconds} secs</span>
     </p>
   )
 }

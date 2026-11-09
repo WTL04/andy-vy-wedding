@@ -11,6 +11,7 @@ import OurStory from './components/OurStory'
 import Registry from './components/Registry'
 import Footer from './components/Footer'
 import RsvpModal from './components/RsvpModal'
+import MusicToggle from './components/MusicToggle'
 import './App.css'
 
 const coolTonePhotos: CarouselPhoto[] = [
@@ -58,6 +59,7 @@ function App() {
           photos={coolTonePhotos}
           orientation="portrait"
           label="Portrait"
+          priority
         />
         <OurStory />
       </div>
@@ -84,6 +86,7 @@ function App() {
         <Registry />
       </div>
       <Footer />
+      <MusicToggle />
       {isRsvpOpen && <RsvpModal onClose={closeRsvp} />}
     </>
   )

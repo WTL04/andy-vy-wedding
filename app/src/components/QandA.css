@@ -6,7 +6,7 @@
 }
 
 .q-and-a h2 {
-  font-size: 7vh;
+  font-size: clamp(2.5rem, 7vh, 3.5rem);
   margin-bottom: 48px;
 }
 
@@ -109,5 +109,29 @@
   .qa-answer,
   .qa-subtext {
     font-size: 20px;
+  }
+
+  .qa-swatches {
+    gap: 12px;
+  }
+
+  .qa-dot {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 375px) {
+  .qa-swatches {
+    gap: 10px;
+  }
+
+  .qa-dot {
+    width: 44px;
+    height: 44px;
+  }
+
+  .qa-color-name {
+    font-size: 12px;
   }
 }

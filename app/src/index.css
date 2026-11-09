@@ -45,9 +45,11 @@ body {
   font-size: 18px;
   line-height: 1.6;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
+}
+
+#root {
+  width: 100%;
 }
 
 h1, h3, h4, h5, h6 {

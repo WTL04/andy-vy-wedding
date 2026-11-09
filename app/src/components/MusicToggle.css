@@ -1,0 +1,88 @@
+.music-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1500;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text);
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  /* Gentle invite-to-tap pulse until first play. */
+  animation: music-invite 2.4s ease-in-out infinite;
+}
+
+.music-toggle.is-playing {
+  animation: none;
+}
+
+.music-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 18px;
+}
+
+.music-bars span {
+  width: 3px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--text);
+  transform-origin: bottom;
+}
+
+/* Paused: flat equalizer. */
+.music-toggle:not(.is-playing) .music-bars span {
+  height: 6px;
+  opacity: 0.7;
+}
+
+/* Playing: dancing bars, staggered. */
+.music-toggle.is-playing .music-bars span {
+  animation: music-dance 0.9s ease-in-out infinite;
+}
+
+.music-toggle.is-playing .music-bars span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.music-toggle.is-playing .music-bars span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.music-toggle.is-playing .music-bars span:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+@keyframes music-dance {
+  0%,
+  100% {
+    height: 5px;
+  }
+  50% {
+    height: 18px;
+  }
+}
+
+@keyframes music-invite {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-toggle,
+  .music-toggle.is-playing .music-bars span {
+    animation: none;
+  }
+}

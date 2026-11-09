@@ -3,6 +3,12 @@
   margin: 60px auto 0;
 }
 
+.photo-carousel__placeholder {
+  width: 100%;
+  border-radius: 8px;
+  background: rgba(127, 127, 127, 0.12);
+}
+
 .photo-carousel--portrait {
   max-width: 600px;
 }
