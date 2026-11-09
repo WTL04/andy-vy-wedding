@@ -36,10 +36,8 @@ const faqs = [
       {
         label: 'Gentlemen ~ No sage, olive, taupe, or beige suits',
         colors: [
-          { name: 'Sage', hex: '#9CAF88' },
-          { name: 'Olive', hex: '#808000' },
-          { name: 'Taupe', hex: '#54463A' },
-          { name: 'Beige', hex: '#F5F5DC' },
+          { name: 'Forest Green', hex: '#304529' },
+          { name: 'Taupe', hex: '#b3a286' },
         ],
       },
     ],
@@ -65,7 +63,17 @@ export default function QandA() {
             <div className="qa-groups">
               {faq.groups.map((group) => (
                 <div key={group.label} className="qa-group">
-                  <p className="qa-subtext">{group.label}</p>
+                  <p className="qa-subtext">
+                    {group.label.split(/(No)/).map((part, j) =>
+                      part === 'No' ? (
+                        <span key={j} className="qa-no">
+                          {part}
+                        </span>
+                      ) : (
+                        part
+                      )
+                    )}
+                  </p>
                   <div className="qa-swatches">
                     {group.colors.map((c) => (
                       <span key={c.name} className="qa-swatch" title={c.name}>

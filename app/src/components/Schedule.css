@@ -6,16 +6,17 @@
 
 .schedule-date,
 .schedule-reminder {
-  font-size: 24px;
   margin: 0;
 }
 
-.schedule-reminder {
-  font-weight: 700;
+.schedule-date {
+  font-size: 24px;
   margin-bottom: 8px;
 }
 
-.schedule-date {
+.schedule-reminder {
+  font-size: 20px;
+  font-weight: 700;
   margin-bottom: 48px;
 }
 
@@ -79,9 +80,12 @@
     font-size: 6vh;
   }
 
-  .schedule-date,
-  .schedule-reminder {
+  .schedule-date {
     font-size: 20px;
+  }
+
+  .schedule-reminder {
+    font-size: 16px;
   }
 
   .event-time {
@@ -99,9 +103,12 @@
     font-size: 5vh;
   }
 
-  .schedule-date,
-  .schedule-reminder {
+  .schedule-date {
     font-size: 18px;
+  }
+
+  .schedule-reminder {
+    font-size: 14px;
   }
 
   .event-time {
@@ -142,9 +149,12 @@
     max-width: 100%;
   }
 
-  .schedule-date,
-  .schedule-reminder {
+  .schedule-date {
     font-size: 20px;
+  }
+
+  .schedule-reminder {
+    font-size: 16px;
   }
 
   .schedule-event {

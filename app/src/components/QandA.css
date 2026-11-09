@@ -32,6 +32,11 @@
   text-underline-offset: 3px;
 }
 
+.qa-no {
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
 .qa-subtext {
   font-style: italic;
   font-size: 24px;
@@ -62,14 +67,15 @@
 }
 
 .qa-dot {
-  width: 32px;
-  height: 32px;
+  width: 64px;
+  height: 64px;
   border-radius: 6px;
   border: 1px solid rgba(0, 0, 0, 0.25);
   position: relative;
   display: inline-block;
 }
 
+.qa-dot::before,
 .qa-dot::after {
   content: '';
   position: absolute;
@@ -78,8 +84,15 @@
   width: 2px;
   height: 136%;
   background: #c0392b;
-  transform: translateX(-50%) rotate(45deg);
   border-radius: 2px;
+}
+
+.qa-dot::before {
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.qa-dot::after {
+  transform: translateX(-50%) rotate(-45deg);
 }
 
 .qa-color-name {
